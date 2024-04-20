@@ -14,6 +14,10 @@
         <module>ch01-xml</module>
         <module>ch02-annotation</module>
         <module>ch05-cycle-dep</module>
+        <module>ch11-aop</module>
+        <module>ch10-ioc</module>
+        <module>ch00-common</module>
+        <module>ch12-aop-aspectj</module>
     </modules>
 
     <properties>
