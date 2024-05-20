@@ -14,6 +14,7 @@
         <module>ch01-xml</module>
         <module>ch02-annotation</module>
         <module>ch05-cycle-dep</module>
+        <module>ch10-proxy</module>
     </modules>
 
     <properties>
