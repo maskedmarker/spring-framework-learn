@@ -4,27 +4,21 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/util https://www.springframework.org/schema/util/spring-util.xsd">
 
     <!-- 每个bean标签对应一个BeanDefinition id/class之类的xml属性值会被解析为对应BeanDefinition的属性值-->
-    <bean id="orderService" class="org.example.learn.spring.framework.context.xml.order.OrderServiceImpl"/>
-
-    <!-- -->
-    <bean id="onlineMall" class="org.example.learn.spring.framework.context.xml.mall.OnlineMall" >
+    <bean id="goodsDTO" class="org.example.learn.spring.commons.model.mall.dto.GoodsDTO">
         <!-- 每个property标签对应一个PropertyValue-->
-        <property name="orderService" ref="orderService"/>
+        <property name="goodsNo" value="G123456"/>
+        <property name="goodsName" value="红牛饮料"/>
+        <property name="goodsVendorNo" value="V123456"/>
+    </bean>
+
+    <bean id="orderBO" class="org.example.learn.spring.commons.model.mall.bo.OrderBO">
+        <property name="orderNo" value="OD123456"/>
+        <property name="goods" ref="goodsDTO"/>
+        <property name="amount" value="100"/>
+        <property name="price" value="9.99"/>
 
         <!-- meta标签很少用,用来附件个性化的元信息 Arbitrary metadata attached to a bean definition.-->
         <!-- 每个meta标签对应一个BeanMetadataAttribute-->
         <!-- <meta key="" value=""/>-->
     </bean>
-
-    <!-- 一个props对应bean的一个Properties类型的属性值 -->
-    <bean id="db_conf" class="org.example.learn.spring.framework.context.xml.db.DbPropertiesHolder">
-        <property name="dbConfiguration">
-            <props>
-                <prop key="db_name">SpringExamplesDB</prop>
-                <prop key="user_name">Root</prop>
-                <prop key="password">Security@202</prop>
-            </props>
-        </property>
-    </bean>
-
 </beans>

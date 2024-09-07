@@ -13,6 +13,7 @@
     <packaging>pom</packaging>
     <modules>
         <module>ch001-model</module>
+        <module>ch002-service</module>
     </modules>
 
     <properties>

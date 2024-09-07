@@ -1,6 +1,6 @@
 package org.example.learn.spring.hello.context.xml;
 
-import org.example.learn.spring.hello.context.xml.mall.OnlineMall;
+import org.junit.Test;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ConfigurableApplicationContext;
@@ -9,47 +9,18 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 import java.util.Arrays;
 
 /**
- * A bean definition essentially is a recipe for creating one or more objects.
- * The container looks at the recipe for a named bean when asked,
- * and uses the configuration metadata encapsulated by that bean definition to create (or acquire) an actual object.
+ * 通过xml配置文件来定义bean
  */
-public class XmlApplicationContextDemo {
+public class Ch002InnerTest {
 
-    public void runSimple() {
-        System.out.printf(">>>>>>>>>>>>>  %s is running \r\n", XmlApplicationContextDemo.class);
-        // 最简单的启动方式
+    /**
+     *
+     */
+    @Test
+    public void test0() {
+        // 构造方法中会调用refresh()方法
         ApplicationContext applicationContext = new ClassPathXmlApplicationContext("classpath:application.xml");
 
-        // 展示应用代码使用场景
-        showBizUsage(applicationContext);
-
-        // 展示spring容器的内部使用场景
-        showSpringInternals(applicationContext);
-    }
-
-
-    public void run() {
-        System.out.printf(">>>>>>>>>>>>>  %s is running \r\n", XmlApplicationContextDemo.class);
-
-        // spring容器refresh的时候,检查是否还有bean definitions未实例化,如果有,就实例化
-        // refresh the context, loading all bean definitions and creating all singletons. Alternatively, call refresh manually after further configuring the context.
-        ApplicationContext applicationContext = new ClassPathXmlApplicationContext(new String[]{"classpath:application.xml"}, true, null);
-
-        // 展示应用代码使用场景
-        showBizUsage(applicationContext);
-
-        // 展示spring容器的内部使用场景
-        showSpringInternals(applicationContext);
-    }
-
-    private static void showBizUsage(ApplicationContext applicationContext) {
-        OnlineMall onlineMallApp = applicationContext.getBean("onlineMall", OnlineMall.class);
-        System.out.println("onlineMallApp = " + onlineMallApp);
-        String msg = onlineMallApp.getOrderService().serve();
-        System.out.println("msg = " + msg);
-    }
-
-    private static void showSpringInternals(ApplicationContext applicationContext) {
         // ListableBeanFactory是中性的,即应用代码可以使用,spring容器内部也是用
         // BeanDefinition只包含用户定义的bean,不包含spring内部的bean(或者这些对象不叫bean)??
         int beanDefinitionCount = applicationContext.getBeanDefinitionCount();
@@ -68,4 +39,5 @@ public class XmlApplicationContextDemo {
             System.out.println("beanClassName = " + beanClassName);
         });
     }
+
 }
