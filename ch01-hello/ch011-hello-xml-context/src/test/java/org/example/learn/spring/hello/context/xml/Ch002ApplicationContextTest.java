@@ -2,6 +2,7 @@ package org.example.learn.spring.hello.context.xml;
 
 import org.junit.Test;
 import org.springframework.beans.factory.config.BeanDefinition;
+import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
@@ -9,9 +10,13 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 import java.util.Arrays;
 
 /**
- * 通过xml配置文件来定义bean
+ * 和BeanFactory一样,ApplicationContext是面向应用代码的
+ * BeanFactory仅仅提供了最基本的getBean功能;
+ * ApplicationContext还支持查看bean definitions
+ * ConfigurableApplicationContext支持BeanFactoryPostProcessor(Configuration and lifecycle methods are encapsulated here to avoid making them obvious to ApplicationContext client code)
+ *
  */
-public class Ch002InnerTest {
+public class Ch002ApplicationContextTest {
 
     /**
      *
@@ -29,11 +34,12 @@ public class Ch002InnerTest {
         Arrays.asList(beanDefinitionNames).forEach(System.out::println);
         System.out.println("-----------------------------------------------------------");
 
-        // 和BeanFactory一样,ApplicationContext是面向应用代码的
+        // 和BeanFactory一样,ApplicationContext是面向应用代码的,但是ApplicationContext
         // 和ConfigurableBeanFactory一样,ConfigurableApplicationContext也是面向spring容器内部使用.都不建议应用代码使用,除非是中间件之类的偏底层的代码.
         ConfigurableApplicationContext configurableApplicationContext = (ConfigurableApplicationContext) applicationContext;
+        ConfigurableListableBeanFactory beanFactory = configurableApplicationContext.getBeanFactory();
         Arrays.asList(beanDefinitionNames).forEach(beanDefinitionName -> {
-            BeanDefinition mergedBeanDefinition = configurableApplicationContext.getBeanFactory().getMergedBeanDefinition(beanDefinitionName);
+            BeanDefinition mergedBeanDefinition = beanFactory.getMergedBeanDefinition(beanDefinitionName);
             System.out.println("mergedBeanDefinition class name = " + mergedBeanDefinition.getClass());
             String beanClassName = mergedBeanDefinition.getBeanClassName();
             System.out.println("beanClassName = " + beanClassName);
