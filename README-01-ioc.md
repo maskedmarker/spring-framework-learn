@@ -15,14 +15,6 @@ The container looks at the recipe for a named bean when asked, and uses the conf
 ### 容器类
 
 spring为ioc概念提供了众多的接口:
-BeanFactory
-
-
-
-
-ApplicationContext和BeanFactory都是面向应用代码的提供容器的接口. 
-BeanFactory仅仅提供了最基本的getBean功能;
-ApplicationContext还支持查看bean definitions ConfigurableApplicationContext支持BeanFactoryPostProcessor(Configuration and lifecycle methods are encapsulated here to avoid making them obvious to ApplicationContext client code)
 
 #### BeanFactory
 
@@ -48,6 +40,19 @@ spring ioc容器在为供应用代码提供使用方法之前,spring ioc容器�
 
 主要方法有:
 setParentBeanFactory/setBeanClassLoader/addBeanPostProcessor/registerDependentBean/setConversionService/registerCustomEditor/addEmbeddedValueResolver
+
+
+#### ApplicationContext
+ApplicationContext是spring提供给应用代码使用的容器接口.
+
+spring的容器(ApplicationContext)的实现类都是AbstractApplicationContext的子类.
+spring容器(ApplicationContext)内部有一个供spring容器内部使用的ConfigurableListableBeanFactory(由AbstractApplicationContext.getBeanFactory方法定义)
+如果将内部的BeanFactory直接暴漏给应用代码是非常危险的.
+
+ApplicationContext通过组合方式(BeanFactory+ConfigurableEnvironment+BeanFactoryPostProcessor+MessageSource+ApplicationEventMulticaster),在spring容器对外提供服务前,可以在容器初始化阶段悄无声息地完成各种定制化逻辑.
+这样spring容器不仅拥有BeanFactory的功能,还大大提高了可扩展性,为应用代码提供更加丰富的其他功能.
+
+
 
 #### 
 #### 
