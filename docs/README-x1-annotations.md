@@ -1,5 +1,8 @@
 # 常用注解
 
+注解上的注解被spring称为meta-annotation.比如@Configuration上的@Component就是meta-annotation.
+
+
 ## @Bean
 
 In the Spring Framework, the @Bean annotation is designed to be used at the method level within a @Configuration-annotated class. 
