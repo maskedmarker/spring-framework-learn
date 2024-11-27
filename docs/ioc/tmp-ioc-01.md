@@ -1,0 +1,52 @@
+# spring-ioc
+
+## todo
+
+
+### 容器
+
+
+以AnnotationConfigApplicationContext举例说明,ApplicationContext需要一个合适的BeanFactory.
+AnnotationConfigApplicationContext是ConfigurableApplicationContext的子类.
+ConfigurableApplicationContext在定义时,要求其内部的BeanFactory是ConfigurableListableBeanFactory
+ConfigurableListableBeanFactory的一个实现就是DefaultListableBeanFactory
+
+在创建bean时,主要工作由ConfigurableListableBeanFactory完成.
+主要是preInstantiateSingletons这个方法完成non-lazy bean的构造
+
+AbstractAutowireCapableBeanFactory
+createBean
+	resolveBeforeInstantiation
+		applyBeanPostProcessorsBeforeInstantiation
+		applyBeanPostProcessorsAfterInitialization
+	doCreateBean
+		initializeBean
+			applyBeanPostProcessorsBeforeInitialization
+			applyBeanPostProcessorsAfterInitialization
+
+
+
+ConfigurableApplicationContext.refresh
+    org.springframework.context.support.AbstractApplicationContext.refresh
+
+
+AbstractAutowireCapableBeanFactory
+ConfigurableListableBeanFactory
+    AutowireCapableBeanFactory
+
+org.springframework.beans.factory.config.ConfigurableListableBeanFactory.preInstantiateSingletons
+
+
+
+
+
+
+### bean
+spring容器构造bean,经历了3个阶段才可用.
+收集元信息metadata(对应BeanDefinition)
+基于元信息实例化对象(作用类似于new Object)
+对实例化对象初始化()
+
+
+### bean method
+@Bean method的signature不仅提供BeanDefinition(ConfigurationClassBeanDefinition),而且method本身还被当作factory method用来生成bean实例.
