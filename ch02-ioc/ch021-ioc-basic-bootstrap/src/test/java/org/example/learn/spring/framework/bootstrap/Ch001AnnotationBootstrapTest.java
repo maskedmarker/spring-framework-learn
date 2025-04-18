@@ -3,6 +3,7 @@ package org.example.learn.spring.framework.bootstrap;
 import org.example.learn.spring.commons.service.mall.GoodsService;
 import org.example.learn.spring.framework.bootstrap.config.IocConfig;
 import org.example.learn.spring.framework.bootstrap.init.MyImportBeanDefinitionRegistrar;
+import org.example.learn.spring.framework.bootstrap.model.config.BizConfiguration;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -23,7 +24,7 @@ public class Ch001AnnotationBootstrapTest {
         applicationContext = new AnnotationConfigApplicationContext();
         StandardEnvironment env = new StandardEnvironment();
         applicationContext.setEnvironment(env);
-        //
+        // 向容器注册一个configuration-class,会触发相关的连带效应(method-bean/import等)
         applicationContext.register(IocConfig.class);
         // 一定要先调用refresh
         applicationContext.refresh();
@@ -57,5 +58,24 @@ public class Ch001AnnotationBootstrapTest {
     @Test(expected = NoSuchBeanDefinitionException.class)
     public void test1() {
         MyImportBeanDefinitionRegistrar myImportBeanDefinitionRegistrar = applicationContext.getBean(MyImportBeanDefinitionRegistrar.class);
+    }
+
+    /**
+     * 注解@Configuration携带了@Component注解,所以被@Configuration注释的类的实例都被当作bean,会被spring容器管理
+     */
+    @Test
+    public void test2() {
+        IocConfig iocConfig = applicationContext.getBean(IocConfig.class);
+        Assert.assertNotNull(iocConfig);
+    }
+
+    /**
+     * 手动注册一个没有携带任何spring注解的bean
+     */
+    @Test
+    public void test3() {
+        BizConfiguration bizConfiguration = applicationContext.getBean(BizConfiguration.class);
+        Assert.assertNotNull(bizConfiguration);
+        Assert.assertEquals("foo", bizConfiguration.getOpMode());
     }
 }
