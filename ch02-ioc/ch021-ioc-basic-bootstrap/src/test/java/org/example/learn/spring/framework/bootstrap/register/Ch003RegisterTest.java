@@ -1,4 +1,4 @@
-package org.example.learn.spring.framework.bootstrap;
+package org.example.learn.spring.framework.bootstrap.register;
 
 import org.example.learn.spring.commons.service.mall.GoodsService;
 import org.example.learn.spring.framework.bootstrap.config.AdvancedIocConfig;
@@ -22,7 +22,7 @@ import java.util.Map;
 /**
  * 通过ImportBeanDefinitionRegistrar/ImportSelector实现间接注册bean
  */
-public class Ch003AnnotationBootstrapTest {
+public class Ch003RegisterTest {
 
     private AnnotationConfigApplicationContext applicationContext;
 
