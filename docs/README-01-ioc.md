@@ -1,7 +1,54 @@
 # spring-ioc
 
+```text
+当我们在讨论IOC的时候, 我们是站在用户代码的视角. 
+spring IOC容器是用户代码直接面对/使用的那个类. 更具体点讲,指的是就是ApplicationContext而非BeanFactory🎯🎯🎯🔥🔥🔥 (ApplicationContext继承了BeanFactory接口是为了方便read-only操作,比如提取Bean) 
+ApplicationContext内部会去维护一个仅供自己使用的可配置的但不对外暴漏的BeanFactory.
+```
 
-## 主要概念
+
+## ApplicationContext
+
+```text
+ApplicationContext是spring提供给应用代码使用的client端的IOC容器接口;而对于IOC容器实现端,使用的ConfigurableApplicationContext接口.🎯🎯🎯
+ConfigurableApplicationContext接口为IOC实现者提供了构建IOC容器所需的基本标准接口(setParent/setEnvironment::ConfigurableEnvironment/setClassLoader/refresh/registerShutdownHook/getBeanFactory::ConfigurableListableBeanFactory/addApplicationListener).
+普通的应用代码应该使用ApplicationContext接口;而框架类实现者可能会用到更偏内部的ConfigurableApplicationContext接口.
+
+
+spring的IOC容器都是ConfigurableApplicationContext接口的实现类(AbstractApplicationContext是其实现层级中最顶端的抽象类).
+
+
+spring的IOC容器内部会去维护一个仅供自己使用的可配置的但不对外暴漏的ConfigurableListableBeanFactory(由ConfigurableApplicationContext.getBeanFactory::ConfigurableListableBeanFactory定义的).
+如果是IOC容器使用方的话,通过client端的ApplicationContext接口的getBean方法来获取bean;如果是IOC容器实现者或者框架实现者,直接操作ConfigurableListableBeanFactory.
+
+
+spring的IOC容器通过组合方式(ConfigurableListableBeanFactory+ConfigurableEnvironment+BeanFactoryPostProcessor+MessageSource+ApplicationListener)来构建高扩展性的容器.在IOC容器对外提供服务前,在容器初始化阶段悄无声息地完成各种定制化逻辑.
+```
+
+
+## ConfigurableListableBeanFactory
+
+```text
+BeanFactory
+The root interface for accessing a Spring bean container (read-only操作)
+
+ConfigurableBeanFactory extends HierarchicalBeanFactory
+This bean factory interface is not meant to be used in normal application code.This extended interface is just meant to allow for framework-internal plug play and for special access to bean factory configuration methods.
+
+AutowireCapableBeanFactory
+Extension of the BeanFactory interface to be implemented by bean factories that are capable of autowiring.
+This subinterface of BeanFactory is not meant to be used in normal application code.
+
+ConfigurableListableBeanFactory extends ListableBeanFactory, AutowireCapableBeanFactory, ConfigurableBeanFactory.
+
+bean的自动装配(autowiring)功能位于ConfigurableListableBeanFactory层,而非ConfigurableApplicationContext层.🎯🎯🎯🔥🔥🔥
+```
+
+```text
+ConfigurableListableBeanFactory的唯一实现类DefaultListableBeanFactory
+```
+
+
 
 ### BeanDefinition
 
@@ -9,53 +56,16 @@ A bean definition essentially is a recipe for creating one or more objects.
 The container looks at the recipe for a named bean when asked, and uses the configuration metadata encapsulated by that bean definition to create (or acquire) an actual object.
 
 描述待创建实例的metadata.spring容器可以基于此metadata创建出用户需要的实例.
-这些metadata从哪里来?
-这些metadata在被用来创建实例前,可以通过BeanFactoryPostProcessor来修改
-
-### 容器类
-
-spring为ioc概念提供了众多的接口:
-
-#### BeanFactory
-
-The root interface for accessing a Spring bean container
-该interface仅仅定义了spring ioc容器最基础/最简单的功能.即getBean/isSingleton/isPrototype这类最最基础的接口方法.
-
-#### HierarchicalBeanFactory
-
-HierarchicalBeanFactory extends BeanFactory
-该interface定义了spring ioc容器之间支持父子层级关系.
-并为父子层级提供了最重要/最基础的2个方法.即getParentBeanFactory提供了获取父容器的方法;containsLocalBean提供了判断当前容器(不涵盖父容器)是否含有某个bean.
-但是并没有预设/假设/约束/限定getBean的时候会从父容器获取bean.抽象的非常克制.
-
-#### ConfigurableBeanFactory
-
-ConfigurableBeanFactory extends HierarchicalBeanFactory
-
-This bean factory interface is not meant to be used in normal application code.This extended interface is just meant to allow for framework-internal plug play and for special access to bean factory configuration methods.
-spring ioc容器在为供应用代码提供使用方法之前,spring ioc容器自身需要先被正确地配置/初始化.
-容器的配置方法与使用方法被定义在了不同interface中,这样容器的使用方可以获取到更清晰的接口.体现了设计中的注意力隔离的思想.
-容器的使用方通常是一般的应用代码,而容器的配置方通常是框架类代码.前者主要用来实现业务逻辑,侧重容器的使用;而后者主要实现框架级别的通用功能,常常需要对spring ioc容器做定制化配置和扩展.
-应用代码不要使用该接口,应该使用BeanFactory或者ListableBeanFactory
-
-主要方法有:
-setParentBeanFactory/setBeanClassLoader/addBeanPostProcessor/registerDependentBean/setConversionService/registerCustomEditor/addEmbeddedValueResolver
-
-
-#### ApplicationContext
-ApplicationContext是spring提供给应用代码使用的容器接口.
-
-spring的容器(ApplicationContext)的实现类都是AbstractApplicationContext的子类.
-spring容器(ApplicationContext)内部有一个供spring容器内部使用的ConfigurableListableBeanFactory(由AbstractApplicationContext.getBeanFactory方法定义)
-如果将内部的BeanFactory直接暴漏给应用代码是非常危险的.
-
-ApplicationContext通过组合方式(BeanFactory+ConfigurableEnvironment+BeanFactoryPostProcessor+MessageSource+ApplicationEventMulticaster),在spring容器对外提供服务前,可以在容器初始化阶段悄无声息地完成各种定制化逻辑.
-这样spring容器不仅拥有BeanFactory的功能,还大大提高了可扩展性,为应用代码提供更加丰富的其他功能.
+这些metadata还从哪里来?
+这些metadata在被用来创建实例前,还可以通过BeanFactoryPostProcessor来修改
 
 
 
-#### 
-#### 
-#### 
-#### 
-#### 
+
+
+
+
+
+
+
+
