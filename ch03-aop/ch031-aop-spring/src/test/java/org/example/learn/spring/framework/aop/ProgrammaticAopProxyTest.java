@@ -46,7 +46,7 @@ public class ProgrammaticAopProxyTest {
         /* 步骤1. 构造定制化的AOP工厂类实例 */
 
         // AOP框架会自动探测入参实现的interface
-        ProxyFactory factory = new ProxyFactory(new SimplePojo());
+        ProxyFactory factory = new ProxyFactory(new SimplePojo());  // ProxyFactory构造器的入参就是proxy对象最终调用的target对象
 
         // 可以省略,除非想新增interface
         // factory.addInterface(Pojo.class);
@@ -67,6 +67,17 @@ public class ProgrammaticAopProxyTest {
 
         // 打印proxy对象的类型.
         System.out.println("proxy.getClass() = " + proxy.getClass());
+        System.out.println("-------------------------------");
+
+        Arrays.stream(proxy.getClass().getDeclaredFields()).forEach(System.out::println);
+        System.out.println("-------------------------------");
+        Arrays.stream(proxy.getClass().getDeclaredMethods()).forEach(System.out::println);
+        System.out.println("-------------------------------");
+
+
+
+
+
         // 默认情况下,spring-aop使用的是jdk proxy
         Assert.assertTrue(proxy.getClass().getName().startsWith("com.sun.proxy.$Proxy"));
 
