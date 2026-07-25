@@ -17,3 +17,9 @@ target/
 # Gradle
 build
 .gradle
+
+# vscode
+.vscode
+
+# cursor
+.cursor
