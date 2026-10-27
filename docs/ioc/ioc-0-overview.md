@@ -60,6 +60,32 @@ The container looks at the recipe for a named bean when asked, and uses the conf
 这些metadata在被用来创建实例前,还可以通过BeanFactoryPostProcessor来修改
 
 
+## 引用依赖方
+
+举例:
+```java
+@Service
+public class OrderService {
+
+    @Autowired
+    private UserService userService;
+}
+```
+
+```text
+在Spring IoC语境下,通常使用 依赖方(Dependent)和被依赖方(Dependency)来描述两者的关系.
+
+OrderService：依赖方（Dependent）,它需要依赖其他对象才能完成工作.
+UserService：被依赖方（Dependency）,它是 OrderService 所依赖的对象.
+
+
+
+🎯🎯🎯spring是通过beanName实现依赖方对被依赖方的间接引用,而不是依赖方对象直接hold被依赖方对象的地址引用.
+这种间接引用可以方便IOC容器对被依赖方进行二次加工,比如:
+1. 对于不需要refresh的场景下,getBean(beanName)最终返回一个代理对象,在原始被依赖对象的基础上添加切面/其他功能, 代理对象直接持有(🎯🎯🎯)被依赖对象.
+2. 对于需要refresh的场景下,getBean(beanName)最终返回一个代理对象,在原始被依赖对象的基础上添加切面/其他功能, 代理对象还是仅持有被依赖对象的beanName(🎯🎯🎯),从而实现refresh特性.
+```
+
 
 
 
